@@ -1,5 +1,5 @@
 #pragma once
-#include <lib/simulation_base.h>
+#include <lib/simulation.h>
 
 class velocity : sim_variable  {};
 

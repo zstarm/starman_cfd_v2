@@ -1,5 +1,5 @@
 #include <iostream>
-#include <simulation.h>
+#include <fluids_simulation.h>
 //#include <fluid_mechanics.h>
 
 int main(int argc, char* argv[]) {

@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 #include <fluid_mechanics.h>
-#include <lib/simulation_base.h>
+#include <lib/simulation.h>
 
 ///////////////////////////////////
 // INPUT
