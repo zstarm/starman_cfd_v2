@@ -3,8 +3,8 @@
 #include <fstream>
 #include <string>
 #include <memory>
-//#include "fluid_mechanics.h"
-#include "lib/simulation_base.h"
+#include <fluid_mechanics.h>
+#include <lib/simulation_base.h>
 
 ///////////////////////////////////
 // INPUT
@@ -17,7 +17,7 @@ class sim_in_CFD_2D_cart : public simulation_input {
 		
 		double Re, Pe, qdot; //Reynolds number, Peclet number, and scaled heat generation
 
-//		boundary_condition u_bc, v_bc, T_bc, p_bc;
+		boundary_condition u_bc, v_bc, T_bc, p_bc;
 			
 	public:
 		sim_in_CFD_2D_cart();

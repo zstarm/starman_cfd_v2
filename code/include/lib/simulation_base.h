@@ -65,3 +65,44 @@ class simulation {
 		void add_input(std::string input_file);
 };
 */
+
+///////////////////////////////////
+// BOUNDARY CONDITION
+///////////////////////////////////
+
+class boundary_condition {
+	private:
+		enum class enum_type : char {
+			dirichlet, neumann
+		};
+
+		enum_type type; 
+		double val;
+
+	public:
+		boundary_condition();
+		boundary_condition(boundary_condition::enum_type t, double v);
+		~boundary_condition();
+
+		void change_type(boundary_condition::enum_type t);
+		void change_value(double v);
+};
+
+
+///////////////////////////////////
+// SIMULATION VARIABLES
+///////////////////////////////////
+
+class sim_variable {
+	private:
+		std::string var_name;
+
+	protected:
+		double* content;
+		int size;
+
+	public:
+		sim_variable();
+		sim_variable(std::string name, int size);
+		~sim_variable();
+};

@@ -1,4 +1,4 @@
-#include "simulation.h"
+#include <simulation.h>
 
 sim_in_CFD_2D_cart::sim_in_CFD_2D_cart() : simulation_input("input.dat") {}
 
