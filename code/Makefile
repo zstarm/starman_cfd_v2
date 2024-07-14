@@ -6,12 +6,12 @@ BIN     := bin
 SRC     := src
 INCLUDE := include
 
-LIBRARIES   :=
+LIBRARIES   := simulation_base
 EXECUTABLE  := main.exe
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
-	$(CC) -std=$(STD) $(CFLAG) -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
-
+#	$(CC) -std=$(STD) $(CFLAG) -I $(INCLUDE) $^ -o $@ $(LIBRARIES)
+	$(CC) -std=$(STD) $(CFLAG) -I./$(INCLUDE) $^ -o $@ -L./$(INCLUDE)/lib/ -l$(LIBRARIES)
 run : $(BIN)/$(EXECUTABLE)
 	clear
 	./$(BIN)/$(EXECUTABLE)
