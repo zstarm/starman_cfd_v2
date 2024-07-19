@@ -25,7 +25,7 @@ class simulation_input {
 		~simulation_input();
 
 		virtual void read_input();
-//		virtual void print_params();
+		virtual void print_input_parameters();
 
 		void set_fname(std::string name);
 		void set_mode(simulation_mode mode);

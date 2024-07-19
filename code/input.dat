@@ -1,0 +1,57 @@
+# *NOTE: file reader will skips any blank lines or lines beginning with "#" 
+#    any lines that have unrecongized identifer will generate error message
+#    MAKE SURE THERE IS A SPACE BETWEEN IDENTIFER AND "=" 
+#---------------------------------------------------GRID INFO----------------------------------------------------------------------
+Nx = 100
+Ny = 100
+dx = 0.05
+dy = 0.05
+#------------------------------------------------TIME PARAMETERS-------------------------------------------------------------------
+# *Use "-1" for time step to select largest stable time step
+Nt = 70001
+dt = -1
+Nskip = 500
+
+#--------------------------------------------SOLVER METHODS------------------------------------------------------------------------
+# *Use "SOR" for sucessive over relaxation method, "Gauss-Seidel" for the Gauss-Seidel method, and "LU" for the LU decomposition
+# *Weight and/or Convergence parameters are only used for the SOR and Gauss-Seidel methods
+solver = SOR
+weight = 1.2
+convergence = 0.0001
+max_iter = 100
+
+#-------------------------------------------NONDIMENSIONAL PARAMETERS--------------------------------------------------------------
+# *specify parameters in nondimensional form
+qdot = 0
+Re = 100
+Pe = 700
+
+#----------------------------------------------BOUNDARY CONDITIONS-----------------------------------------------------------------
+# *use either "dirichlet" or "neumann" identifer for boudnary conditions types
+# *neumann boundary conditions are applied with first order accuracy
+# *use nondimensional values
+# *specify boundary type/values in { N S E W } order
+
+# PRESSURE CONDITIONS
+PBC = { neumann neumann neumann neumann }
+PBV = { 0 0 0 0 }
+
+# U VELOCITY CONDITIONS
+UBC = { dirichlet dirichlet dirichlet dirichlet }
+UBV = { 1 0 0 0 }
+
+# V VELOCITY CONDITIONS
+VBC = { dirichlet dirichlet dirichlet dirichlet }
+VBV = { 0 0 0 0 }
+
+# TEMPERATURE CONDITIONS
+TBC = { neumann neumann neumann neumann }
+TBV = { 0 0 0 0 }
+
+#-------------------------------------------------INITIAL VALUES-------------------------------------------------------------------
+Tinit = 0.0
+Pinit = 0.0
+Uinit = 0.0
+Vinit = 0.0
+
+#----------------------------------------------------------------------------------------------------------------------------------

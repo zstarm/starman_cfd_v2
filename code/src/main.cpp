@@ -5,8 +5,9 @@
 int main(int argc, char* argv[]) {
 	
 //	std::cout << "Hello World!" << std::endl;
-	simulation_input test;
-	test.print_title();
+	sim_in_CFD_2D_cart test;
+	test.read_input();
+	test.print_input_parameters();
 
 	return 0; 
 }
