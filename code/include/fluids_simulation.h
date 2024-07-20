@@ -20,6 +20,7 @@ class sim_in_CFD_2D_cart : public simulation_input {
 		boundary_condition u_bc, v_bc, T_bc, p_bc;
 
 		void parse_infile_line(std::string& str, char delim);
+		void save_boundary_input(boundary_condition& var, std::string& str, char type_or_value);
 			
 	public:
 		sim_in_CFD_2D_cart();

@@ -70,22 +70,27 @@ class simulation {
 // BOUNDARY CONDITION
 ///////////////////////////////////
 
+enum class boundary_type : char {
+	dirichlet, neumann
+};
+
 class boundary_condition {
 	private:
-		enum class enum_type : char {
-			dirichlet, neumann
-		};
 
-		enum_type type; 
-		double val;
+		int N;
+		boundary_type* type; 
+		double* val;
 
 	public:
 		boundary_condition();
-		boundary_condition(boundary_condition::enum_type t, double v);
+		boundary_condition(int num_of_boundaries);
+		boundary_condition(int num_of_boundaries, boundary_type t, double v);
 		~boundary_condition();
 
-		void change_type(boundary_condition::enum_type t);
-		void change_value(double v);
+		void set_size(int size);
+		void change_type(int ind, boundary_type t);
+		void change_value(int ind, double v);
+		void print_conditions();
 };
 
 
