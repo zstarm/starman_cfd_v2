@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <memory>
+
 #include <fluids_solvers.h>
 #include <lib/simulation.h>
 
@@ -11,6 +12,7 @@
 ///////////////////////////////////
 
 class sim_in_CFD_2D_cart : public simulation_input {
+	friend class fluid_sim_2D;
 	private:
 		double dt, dx, dy; //delta time, x, and y;
 		int Nt, Nskip, Ni, Nj; //number of time steps, time steps to skip, x points, and y points
@@ -19,8 +21,18 @@ class sim_in_CFD_2D_cart : public simulation_input {
 
 		boundary_condition u_bc, v_bc, T_bc, p_bc;
 
+		linear_system_solver_methods Psolver_type;
+		std::vector<double> Psolver_opts;
+
+		time_differentiation_methods Usolver_type;
+		upwinding_accuracy Uadvect_acc; 
+
+		time_differentiation_methods Tsolver_type;
+		upwinding_accuracy Tadvect_acc;
+
 		void parse_infile_line(std::string& str, char delim);
 		void save_boundary_input(boundary_condition& var, std::string& str, char type_or_value);
+		void save_solver_selections(std::string& str, char var_type);
 			
 	public:
 		sim_in_CFD_2D_cart();

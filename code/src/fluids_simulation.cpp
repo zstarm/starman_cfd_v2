@@ -94,6 +94,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 			else if(name == "Pe") {
 				Pe = std::stod(str);
 			}
+			else if(name == "Psolver") {
+				save_solver_selections(str, 'p');
+			}
 			else {
 				//throw 
 			}
@@ -112,8 +115,6 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 			}
 			break;
 		case 's':
-			if(name == "solver") {
-			}
 			break;
 		case 't':
 			if(name == "TBC") {
@@ -121,6 +122,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 			}
 			else if(name == "TBV") {
 				save_boundary_input(T_bc, str, 'v');	
+			}
+			else if(name == "Tsolver") {
+				save_solver_selections(str, 'T');
 			}
 			else {
 				//throw
@@ -132,6 +136,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 			}
 			else if(name == "UBV") {
 				save_boundary_input(u_bc, str, 'v');	
+			}
+			else if(name == "Usolver") {
+				save_solver_selections(str, 'u');
 			}
 			break;
 		case 'v':
@@ -202,6 +209,111 @@ void sim_in_CFD_2D_cart::save_boundary_input(boundary_condition& var, std::strin
 	}
 }
 
+void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type) {
+
+	str.erase(0, str.find('{',0) + 1);
+	str = str.substr(0, str.find('}',1));
+	if(str[0] == ' ') {
+		str.erase(0, 1);
+	}
+
+	std::size_t pos;
+	std::string tmp;
+	switch(var_type) {
+		case 'p': //pressure
+			pos = str.find(' ', 0);
+			tmp = str.substr(0, pos);
+				if(tmp ==  "LU") {
+					Psolver_type = linear_system_solver_methods::LU;
+				}
+				else if(tmp ==  "GS") {
+					Psolver_type = linear_system_solver_methods::GS;
+					str.erase(0, pos + 1);
+					for(int i = 0; i < 2; i++) {
+						pos = str.find(' ', 0);
+						if(pos != std::string::npos) {
+							Psolver_opts.push_back(std::stod(str.substr(0, pos)));
+						}
+						else {
+							//throw 
+							break;
+						}
+					}
+				}
+				else if ( "SOR") {
+					Psolver_type = linear_system_solver_methods::SOR;
+					str.erase(0, pos + 1);
+					for(int i = 0; i < 3; i++) {
+						pos = str.find(' ', 0);
+						if(pos != std::string::npos) {
+							Psolver_opts.push_back(std::stod(str.substr(0, pos)));
+						}
+						else {
+							//throw 
+							break;
+						}
+					}
+				}
+				else {
+					Psolver_type = linear_system_solver_methods::None;
+					//throw
+				}
+			break;
+		case 'u': //velocity
+			pos = str.find(' ', 0);
+			tmp = str.substr(0, pos);
+				if(tmp ==  "EXPLICIT") {
+					Usolver_type = time_differentiation_methods::explicit_euler;
+					str.erase(0, pos + 1);
+					pos = str.find(' ', 0);
+					if(pos != std::string::npos) {
+						if(str.substr(0, pos) == "1") {
+							Uadvect_acc = upwinding_accuracy::first_order;
+						}
+						else {
+							//throw
+						}
+					}
+					else {
+						//throw 
+					}
+				}
+				else {
+					Usolver_type = time_differentiation_methods::None;
+					//throw
+				}
+			break;
+		case 'T': //energy/temperature
+			pos = str.find(' ', 0);
+			tmp = str.substr(0, pos);
+				if(tmp ==  "EXPLICIT") {
+					Tsolver_type = time_differentiation_methods::explicit_euler;
+					str.erase(0, pos + 1);
+					pos = str.find(' ', 0);
+					if(pos != std::string::npos) {
+						if(str.substr(0, pos) == "1") {
+							Tadvect_acc = upwinding_accuracy::first_order;
+						}
+						else {
+							//throw
+						}
+					}
+					else {
+						//throw 
+					}
+				}
+				else {
+					Tsolver_type = time_differentiation_methods::None;
+					//throw
+				}
+			break;
+		default:
+			//throw
+			std::cout << "error" << std::endl;
+	}
+
+}
+
 void sim_in_CFD_2D_cart::read_input() {
    //opens file name of the input file
    std::ifstream fs(input_file_name);
@@ -264,6 +376,89 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 	T_bc.print_conditions();
 	std::cout << "\nPressure\n"; 
 	p_bc.print_conditions();
+	std::cout << sect_break << std::endl;
+
+	//SOLVER METHODS
+	std::cout << "Solver Methods\n" << sect_break;
+	std::cout << "\nPressure Poisson Equation: Fractional Step";
+	std::cout << "\nLinear System Solver = ";
+	switch(static_cast<int>(Psolver_type)) {
+		case static_cast<int>(linear_system_solver_methods::LU):
+			std::cout << "LU Decomposition";
+			break;
+		case static_cast<int>(linear_system_solver_methods::GS):
+			std::cout << "Gauss-Seidel";
+			std::cout << "\n\tConvergence: " << Psolver_opts[0];
+			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
+			break;
+		case static_cast<int>(linear_system_solver_methods::SOR):
+			std::cout << "Gauss-Seidel";
+			std::cout << "\n\tConvergence: " << Psolver_opts[0];
+			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
+			std::cout << "\n\tWeight: " << Psolver_opts[2];
+			break;
+		default:
+			//throw;
+		std::cout << "No Selection";
+	}
+	std::cout << std::endl;
+
+	std::cout << "\nVelocity Schemes";
+	std::cout << "\n\tTime Differentiation = ";
+	switch(static_cast<int>(Usolver_type)) {
+		case static_cast<int>(time_differentiation_methods::explicit_euler):
+			std::cout << "Explicit Euler";
+			break;
+		case static_cast<int>(time_differentiation_methods::implicit_euler):
+			std::cout << "Implicit Euler";
+			break;
+		default:
+			//throw;
+		std::cout << "No Selection" << std::endl;
+	}
+
+	std::cout << "\n\tUpwinding Spatial Accuracy = ";
+	switch(static_cast<int>(Uadvect_acc)) {
+		case static_cast<int>(upwinding_accuracy::first_order):
+			std::cout << "1st Order";
+			break;
+		case static_cast<int>(upwinding_accuracy::second_order):
+			std::cout << "2nd Order";
+			break;
+		default:
+			//throw;
+		std::cout << "No Selection";
+	}
+	std::cout << std::endl;
+
+	std::cout << "\nTemperature/Energy Schemes";
+	std::cout << "\n\tTime Differentiation = ";
+	switch(static_cast<int>(Tsolver_type)) {
+		case static_cast<int>(time_differentiation_methods::explicit_euler):
+			std::cout << "Explicit Euler";
+			break;
+		case static_cast<int>(time_differentiation_methods::implicit_euler):
+			std::cout << "Implicit Euler";
+			break;
+		default:
+			//throw;
+		std::cout << "No Selection";
+	}
+
+	std::cout << "\n\tUpwinding Spatial Accuracy = ";
+	switch(static_cast<int>(Tadvect_acc)) {
+		case static_cast<int>(upwinding_accuracy::first_order):
+			std::cout << "1st Order";
+			break;
+		case static_cast<int>(upwinding_accuracy::second_order):
+			std::cout << "2nd Order";
+			break;
+		default:
+			//throw;
+		std::cout << "No Selection" << std::endl;
+	}
+	std::cout << std::endl;
+
 	std::cout << sect_break << std::endl;
 	
 }

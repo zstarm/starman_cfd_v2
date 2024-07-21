@@ -1,32 +1,59 @@
 # *NOTE: file reader will skips any blank lines or lines beginning with "#" 
 #    any lines that have unrecongized identifer will generate error message
 #    MAKE SURE THERE IS A SPACE BETWEEN IDENTIFER AND "=" 
-#---------------------------------------------------GRID INFO----------------------------------------------------------------------
+# GRID INFO ----------------------------------------------------------------
 Nx = 100
 Ny = 100
 dx = 0.05
 dy = 0.05
-#------------------------------------------------TIME PARAMETERS-------------------------------------------------------------------
+# TIME PARAMETERS ----------------------------------------------------------
 # *Use "-1" for time step to select largest stable time step
 Nt = 70001
 dt = -1
 Nskip = 500
 
-#--------------------------------------------SOLVER METHODS------------------------------------------------------------------------
-# *Use "SOR" for sucessive over relaxation method, "Gauss-Seidel" for the Gauss-Seidel method, and "LU" for the LU decomposition
-# *Weight and/or Convergence parameters are only used for the SOR and Gauss-Seidel methods
-solver = SOR
-weight = 1.2
-convergence = 0.0001
-max_iter = 100
+# SOLVER METHODS -----------------------------------------------------------
+#	*specify method by { METHOD OPT1 OPT2 ... }
+#
+# PRESSURE POISSON (fractional step)
+# 	METHODS AVAIL : "SOR" "GS" "LU"
+# 		"SOR" : sucessive over relaxation
+#			OPT1 : CONVERGENCE
+#			OPT2 : MAX ITERATIONS
+#			OPT3 : WEIGHT
+#
+# 		"GS" : Gauss-Seidel
+# 			OPT1 : CONVERGENCE
+# 			OPT2 : MAX ITERATIONS
+#
+# 		"LU" : LU decomposition
 
-#-------------------------------------------NONDIMENSIONAL PARAMETERS--------------------------------------------------------------
+Psolver = { SOR 0.0001 150 1.2 } 
+
+# VELOCITY (upwinding)
+#	METHODS AVAIL : "EXPLICIT"
+#		"EXPLICIT" : explicit euler finite differencing
+#			OPT1 : SPATIAL ACCURACY ORDER
+#				*NOTE: only 1st order accuracy available
+
+Usolver = { EXPLICIT 1 } 
+
+# TEMPERATURE/ENERGY (upwinding)
+# 	*NOTE: leave brackets blank to set the energy equation OFF
+#	METHODS AVAIL : "EXPLICIT"
+#		"EXPLICIT" : explicit euler finite differencing
+#			OPT1 : SPATIAL ACCURACY ORDER
+#				*NOTE: only 1st order accuracy available
+
+Tsolver = { EXPLICIT 1 }
+
+# NONDIMENSIONAL PARAMETERS ------------------------------------------------
 # *specify parameters in nondimensional form
 qdot = 0
 Re = 100
 Pe = 700
 
-#----------------------------------------------BOUNDARY CONDITIONS-----------------------------------------------------------------
+# BOUNDARY CONDITIONS ------------------------------------------------------
 # *use either "dirichlet" or "neumann" identifer for boudnary conditions types
 # *neumann boundary conditions are applied with first order accuracy
 # *use nondimensional values
@@ -48,10 +75,10 @@ VBV = { 0 0 0 0 }
 TBC = { neumann neumann neumann neumann }
 TBV = { 0 0 0 0 }
 
-#-------------------------------------------------INITIAL VALUES-------------------------------------------------------------------
+# INITIAL VALUES -----------------------------------------------------------
 Tinit = 0.0
 Pinit = 0.0
 Uinit = 0.0
 Vinit = 0.0
 
-#----------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------
