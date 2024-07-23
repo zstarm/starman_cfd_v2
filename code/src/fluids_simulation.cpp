@@ -26,141 +26,201 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 	}
 
 	//READING AND STORING INPUT PARAMETERS FROM .DAT FILE
-	switch(std::tolower(name[0])) {
-		case 'a':
-			break;
-		case 'b':
-			break;
-		case 'c':
-			break;
-		case 'd':
-			if(name == "dt") {
-				dt = std::stod(str);
-			}
-			else if(name == "dx") {
-				dx = std::stod(str);
-			}
-			else if(name == "dy") {
-				dy = std::stod(str);
-			}
-			else {
-				//throw
-			}
-			break;
-		case 'e':
-			break;
-		case 'f':
-			break;
-		case 'g':
-			break;
-		case 'h':
-			break;
-		case 'i':
-			break;
-		case 'j':
-			break;
-		case 'k':
-			break;
-		case 'l':
-			break;
-		case 'm':
-			break;
-		case 'n':
-			if(name == "Nskip") {
-				Nskip = std::stoi(str);
-			}
-			else if(name == "Nt") {
-				Nt = std::stoi(str);
-			}
-			else if(name == "Nx") {
-				Ni = std::stoi(str);
-			}
-			else if(name == "Ny") {
-				Nj = std::stoi(str);
-			}
-			else {
-				//throw
-			}
-			break;
-		case 'o':
-			break;
-		case 'p':
-			if(name == "PBC") {
-				save_boundary_input(p_bc, str, 't');	
-			}
-			else if(name == "PBV") {
-				save_boundary_input(p_bc, str, 'v');	
-			}
-			else if(name == "Pe") {
-				Pe = std::stod(str);
-			}
-			else if(name == "Psolver") {
-				save_solver_selections(str, 'p');
-			}
-			else {
-				//throw 
-			}
-			break;
-		case 'q':
-			if(name == "qdot") {
-				qdot = std::stod(str);
-			}
-			break;
-		case 'r':
-			if(name == "Re") {
-				Re = std::stod(str);
-			}
-			else {
-				//throw 
-			}
-			break;
-		case 's':
-			break;
-		case 't':
-			if(name == "TBC") {
-				save_boundary_input(T_bc, str, 't');	
-			}
-			else if(name == "TBV") {
-				save_boundary_input(T_bc, str, 'v');	
-			}
-			else if(name == "Tsolver") {
-				save_solver_selections(str, 'T');
-			}
-			else {
-				//throw
-			}
-			break;
-		case 'u':
-			if(name == "UBC") {
-				save_boundary_input(u_bc, str, 't');	
-			}
-			else if(name == "UBV") {
-				save_boundary_input(u_bc, str, 'v');	
-			}
-			else if(name == "Usolver") {
-				save_solver_selections(str, 'u');
-			}
-			break;
-		case 'v':
-			if(name == "VBC") {
-				save_boundary_input(v_bc, str, 't');	
-			}
-			else if(name == "VBV") {
-				save_boundary_input(v_bc, str, 'v');	
-			}
-			break;
-		case 'w':
-			break;
-		case 'x':
-			break;
-		case 'y':
-			break;
-		case 'z':
-			break;
-		default:
-			//throw
-			std::cout << "error" << std::endl;
+	try {
+		switch(std::tolower(name[0])) {
+			case 'a':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
 
+			case 'b':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'c':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'd':
+				if(name == "dt") {
+					dt = std::stod(str);
+				}
+				else if(name == "dx") {
+					dx = std::stod(str);
+				}
+				else if(name == "dy") {
+					dy = std::stod(str);
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+				}
+				break;
+
+			case 'e':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'f':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'g':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'h':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'i':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'j':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'k':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'l':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'm':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'n':
+				if(name == "Nskip") {
+					Nskip = std::stoi(str);
+				}
+				else if(name == "Nt") {
+					Nt = std::stoi(str);
+				}
+				else if(name == "Nx") {
+					Ni = std::stoi(str);
+				}
+				else if(name == "Ny") {
+					Nj = std::stoi(str);
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+				}
+				break;
+
+			case 'o':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'p':
+				if(name == "PBC") {
+					save_boundary_input(p_bc, str, 't');	
+				}
+				else if(name == "PBV") {
+					save_boundary_input(p_bc, str, 'v');	
+				}
+				else if(name == "Pe") {
+					Pe = std::stod(str);
+				}
+				else if(name == "Psolver") {
+					save_solver_selections(str, 'p');
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+					//throw 
+				}
+				break;
+
+			case 'q':
+				if(name == "qdot") {
+					qdot = std::stod(str);
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+				}
+				break;
+
+			case 'r':
+				if(name == "Re") {
+					Re = std::stod(str);
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+					//throw 
+				}
+				break;
+
+			case 's':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 't':
+				if(name == "TBC") {
+					save_boundary_input(T_bc, str, 't');	
+				}
+				else if(name == "TBV") {
+					save_boundary_input(T_bc, str, 'v');	
+				}
+				else if(name == "Tsolver") {
+					save_solver_selections(str, 'T');
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+					//throw
+				}
+				break;
+
+			case 'u':
+				if(name == "UBC") {
+					save_boundary_input(u_bc, str, 't');	
+				}
+				else if(name == "UBV") {
+					save_boundary_input(u_bc, str, 'v');	
+				}
+				else if(name == "Usolver") {
+					save_solver_selections(str, 'u');
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+				}
+				break;
+
+			case 'v':
+				if(name == "VBC") {
+					save_boundary_input(v_bc, str, 't');	
+				}
+				else if(name == "VBV") {
+					save_boundary_input(v_bc, str, 'v');	
+				}
+				else {
+					throw std::logic_error("Unrecognized input identifier");
+				}
+				break;
+
+			case 'w':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'x':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'y':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			case 'z':
+				throw std::logic_error("Unrecognized input identifier");
+				break;
+
+			default:
+				throw std::logic_error("Unrecognized input identifier");
+		}
+	}
+	
+	catch(const std::exception& e) {
+		std::cout << "Exception: " << e.what() << " \"" << name << "\"" << std::endl;
 	}
 }
 
@@ -174,38 +234,48 @@ void sim_in_CFD_2D_cart::save_boundary_input(boundary_condition& var, std::strin
 
 	std::size_t pos;
 	int count = 0;
-	if(type_or_value == 't') {
-		for(int i = 0; (i < 4) && ((pos = str.find(' ', 0)) != std::string::npos); i++) {
-			std::string tmp = str.substr(0, pos);
-			if(tmp == "dirichlet") {
-				var.change_type(i, boundary_type::dirichlet);
+	try {
+		if(type_or_value == 't') {
+			for(int i = 0; (i < 4) && ((pos = str.find(' ', 0)) != std::string::npos); i++) {
+				std::string tmp = str.substr(0, pos);
+				if(tmp == "dirichlet") {
+					var.change_type(i, boundary_type::dirichlet);
+				}
+				else if(tmp == "neumann") {
+					var.change_type(i, boundary_type::neumann);	
+				}
+				else {
+					throw std::logic_error("Invailid boundary condition type used : \"" + tmp + "\"");
+				}
+				str.erase(0, pos+1);
+				count = i;
 			}
-			else if(tmp == "neumann") {
-				var.change_type(i, boundary_type::neumann);	
+			if(count != 3) {
+				throw count;
 			}
-			else {
-				//throw;
-			}
-			str.erase(0, pos+1);
-			count = i;
 		}
-		if(count != 3) {
-			//throw
+		else if(type_or_value == 'v') {
+			for(int i = 0; (i < 4) && ((pos = str.find(' ', 0)) != std::string::npos); i++) {
+				double tmp = std::stod(str.substr(0, pos));
+				var.change_value(i, tmp);
+				str.erase(0, pos+1);
+				count = i;
+			}
+			if(count != 3) {
+				throw count;
+			}
+		}
+		else {
+			std::cout << "Invalid boundary type/value identifier passed to function!" << std::endl;
 		}
 	}
-	else if(type_or_value == 'v') {
-		for(int i = 0; (i < 4) && ((pos = str.find(' ', 0)) != std::string::npos); i++) {
-			double tmp = std::stod(str.substr(0, pos));
-			var.change_value(i, tmp);
-			str.erase(0, pos+1);
-			count = i;
-		}
-		if(count != 3) {
-			//throw
-		}
+	
+	catch(const std::exception& e) {
+		std::cout << "Exception: " << e.what() << std::endl;
 	}
-	else {
-		//throw
+
+	catch(int) {
+		std::cout << "Incorrect number of arguments specified for boundary condition" << std::endl;
 	}
 }
 
@@ -219,138 +289,151 @@ void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type)
 
 	std::size_t pos;
 	std::string tmp;
-	switch(var_type) {
-		case 'p': //pressure
-			pos = str.find(' ', 0);
-			tmp = str.substr(0, pos);
-				if(tmp ==  "LU") {
-					Psolver_type = linear_system_solver_methods::LU;
-				}
-				else if(tmp ==  "GS") {
-					Psolver_type = linear_system_solver_methods::GS;
-					str.erase(0, pos + 1);
-					for(int i = 0; i < 2; i++) {
-						pos = str.find(' ', 0);
-						if(pos != std::string::npos) {
-							Psolver_opts.push_back(std::stod(str.substr(0, pos)));
-						}
-						else {
-							//throw 
-							break;
-						}
-						str.erase(0, pos + 1);
+	
+	try {
+		switch(var_type) {
+			case 'p': //pressure
+				pos = str.find(' ', 0);
+				tmp = str.substr(0, pos);
+					if(tmp ==  "LU") {
+						Psolver_type = linear_system_solver_methods::LU;
 					}
-				}
-				else if ( "SOR") {
-					Psolver_type = linear_system_solver_methods::SOR;
-					str.erase(0, pos + 1);
-					for(int i = 0; i < 3; i++) {
-						pos = str.find(' ', 0);
-						if(pos != std::string::npos) {
-							Psolver_opts.push_back(std::stod(str.substr(0, pos)));
-						}
-						else {
-							//throw 
-							break;
-						}
+					else if(tmp ==  "GS") {
+						Psolver_type = linear_system_solver_methods::GS;
 						str.erase(0, pos + 1);
-					}
-				}
-				else {
-					Psolver_type = linear_system_solver_methods::None;
-					//throw
-				}
-			break;
-		case 'u': //velocity
-			pos = str.find(' ', 0);
-			tmp = str.substr(0, pos);
-				if(tmp ==  "EXPLICIT") {
-					Usolver_type = time_differentiation_methods::explicit_euler;
-					str.erase(0, pos + 1);
-					pos = str.find(' ', 0);
-					if(pos != std::string::npos) {
-						if(str.substr(0, pos) == "1") {
-							Uadvect_acc = upwinding_accuracy::first_order;
+						for(int i = 0; i < 2; i++) {
+							pos = str.find(' ', 0);
+							if(pos != std::string::npos) {
+								Psolver_opts.push_back(std::stod(str.substr(0, pos)));
+							}
+							else {
+								throw std::logic_error("Not enough options supplied for \"Gauss-Seidel\" pressure solver algorithm");
+								break;
+							}
+							str.erase(0, pos + 1);
 						}
-						else {
-							//throw
+					}
+					else if (tmp == "SOR") {
+						Psolver_type = linear_system_solver_methods::SOR;
+						str.erase(0, pos + 1);
+						for(int i = 0; i < 3; i++) {
+							pos = str.find(' ', 0);
+							if(pos != std::string::npos) {
+								Psolver_opts.push_back(std::stod(str.substr(0, pos)));
+							}
+							else {
+								throw std::logic_error("Not enough options supplied for \"SOR\" pressure solver algorithm");
+								break;
+							}
+							str.erase(0, pos + 1);
 						}
 					}
 					else {
-						//throw 
+						Psolver_type = linear_system_solver_methods::None;
+						throw std::logic_error("Unrecognized solver method for pressure");
 					}
-				}
-				else {
-					Usolver_type = time_differentiation_methods::None;
-					//throw
-				}
-			break;
-		case 'T': //energy/temperature
-			pos = str.find(' ', 0);
-			tmp = str.substr(0, pos);
-				if(tmp ==  "EXPLICIT") {
-					Tsolver_type = time_differentiation_methods::explicit_euler;
-					str.erase(0, pos + 1);
-					pos = str.find(' ', 0);
-					if(pos != std::string::npos) {
-						if(str.substr(0, pos) == "1") {
-							Tadvect_acc = upwinding_accuracy::first_order;
-						}
-						else {
-							//throw
-						}
-					}
-					else {
-						//throw 
-					}
-				}
-				else {
-					Tsolver_type = time_differentiation_methods::None;
-					//throw
-				}
-			break;
-		default:
-			//throw
-			std::cout << "error" << std::endl;
-	}
+				break;
 
+			case 'u': //velocity
+				pos = str.find(' ', 0);
+				tmp = str.substr(0, pos);
+					if(tmp ==  "EXPLICIT") {
+						Usolver_type = time_differentiation_methods::explicit_euler;
+						str.erase(0, pos + 1);
+						pos = str.find(' ', 0);
+						if(pos != std::string::npos) {
+							if(str.substr(0, pos) == "1") {
+								Uadvect_acc = upwinding_accuracy::first_order;
+							}
+							else {
+								throw std::logic_error("Unsupported velocity upwinding spatial accuracy of order " + str.substr(0, pos));
+							}
+						}
+						else {
+							throw std::logic_error("No option supplied for velocity upwinding accuracy");
+						}
+					}
+					else {
+						Usolver_type = time_differentiation_methods::None;
+						throw std::logic_error("Invaild time differentiation method given for velocity");
+					}
+				break;
+			case 'T': //energy/temperature
+				pos = str.find(' ', 0);
+				tmp = str.substr(0, pos);
+					if(tmp ==  "EXPLICIT") {
+						Tsolver_type = time_differentiation_methods::explicit_euler;
+						str.erase(0, pos + 1);
+						pos = str.find(' ', 0);
+						if(pos != std::string::npos) {
+							if(str.substr(0, pos) == "1") {
+								Tadvect_acc = upwinding_accuracy::first_order;
+							}
+							else {
+								throw std::logic_error("Unsupported temperature/energy upwinding spatial accuracy of order " + str.substr(0, pos));
+							}
+						}
+						else {
+							throw std::logic_error("No option supplied for temperature/energy upwinding accuracy");
+						}
+					}
+					else {
+						Tsolver_type = time_differentiation_methods::None;
+						throw std::logic_error("Invaild time differentiation method given for temperature/energy");
+					}
+				break;
+
+			default:
+				std::cout << "Invalid variable solver method identifier passed to function!" << std::endl;
+		}
+	}
+	
+	catch(const std::exception& e) {
+		std::cout << "Exception: " << e.what() << std::endl; 
+	}
 }
 
 void sim_in_CFD_2D_cart::read_input() {
    //opens file name of the input file
    std::ifstream fs(input_file_name);
-   if(fs.is_open()) {
-      std::string line;
-      while(!fs.eof()) {
-         //starts reading lines from input file
-         std::getline(fs,line);
-         //skip empty lines or commeted lines (beginning with #)
-         if(line[0] != '#' && line[0] != '\r' && !line.empty()) {
-            parse_infile_line(line, '=');
-         }
-      }
+   try {
+	   if(fs.is_open()) {
+		  std::string line;
+		  while(!fs.eof()) {
+			 //starts reading lines from input file
+			 std::getline(fs,line);
+			 //skip empty lines or commeted lines (beginning with #)
+			 if(line[0] != '#' && line[0] != '\r' && !line.empty()) {
+				parse_infile_line(line, '=');
+			 }
+		  }
 
-      /*
-	  //reset the time step size based on Pe number if "-1" option is selected
-      if(dt < 0) {
-         if(dt > dx) {
-            dt = dx;
-         }
-         if(dt > dy) {
-            dt = dy;
-         }
-         dt = 0.5*peclet_number/(1.0/dx/dx + 1.0/dy/dy);
-         double dt_obj = 0.5/alpha*peclet_number/(1.0/dx/dx + 1.0/dy/dy);
-         if(dt > dt_obj) {
-            dt = dt_obj;
-         }
-      }
-	  */
+		  /*
+		  //reset the time step size based on Pe number if "-1" option is selected
+		  if(dt < 0) {
+			 if(dt > dx) {
+				dt = dx;
+			 }
+			 if(dt > dy) {
+				dt = dy;
+			 }
+			 dt = 0.5*peclet_number/(1.0/dx/dx + 1.0/dy/dy);
+			 double dt_obj = 0.5/alpha*peclet_number/(1.0/dx/dx + 1.0/dy/dy);
+			 if(dt > dt_obj) {
+				dt = dt_obj;
+			 }
+		  }
+		  */
+	   }
+
+	   //returns error message if input file cannot be opened 
+	   else {
+		   throw std::runtime_error("Could not open file \"" + input_file_name + "\"");
+	   }
    }
 
-   //returns error message if input file cannot be opened 
-   else {
-	   std::cout << "ERROR: Cannot open input file" << std::endl;
+   catch(std::exception& e) {
+	   std::cout << "Exception: " << e.what() << std::endl;
    }
 
 }
@@ -388,20 +471,22 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		case static_cast<char>(linear_system_solver_methods::LU):
 			std::cout << "LU Decomposition";
 			break;
+			
 		case static_cast<char>(linear_system_solver_methods::GS):
 			std::cout << "Gauss-Seidel";
 			std::cout << "\n\tConvergence: " << Psolver_opts[0];
 			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
 			break;
+
 		case static_cast<char>(linear_system_solver_methods::SOR):
 			std::cout << "Successive Over-Relaxation";
 			std::cout << "\n\tConvergence: " << Psolver_opts[0];
 			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
 			std::cout << "\n\tWeight: " << Psolver_opts[2];
 			break;
+
 		default:
-			//throw;
-		std::cout << "No Selection";
+			std::cout << "No Selection";
 	}
 	std::cout << std::endl;
 
@@ -411,12 +496,13 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		case static_cast<char>(time_differentiation_methods::explicit_euler):
 			std::cout << "Explicit Euler";
 			break;
+
 		case static_cast<char>(time_differentiation_methods::implicit_euler):
 			std::cout << "Implicit Euler";
 			break;
+
 		default:
-			//throw;
-		std::cout << "No Selection" << std::endl;
+			std::cout << "No Selection" << std::endl;
 	}
 
 	std::cout << "\n\tUpwinding Spatial Accuracy = ";
@@ -424,12 +510,13 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		case static_cast<char>(upwinding_accuracy::first_order):
 			std::cout << "1st Order";
 			break;
+
 		case static_cast<char>(upwinding_accuracy::second_order):
 			std::cout << "2nd Order";
 			break;
+
 		default:
-			//throw;
-		std::cout << "No Selection";
+			std::cout << "No Selection";
 	}
 	std::cout << std::endl;
 
@@ -439,12 +526,13 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		case static_cast<char>(time_differentiation_methods::explicit_euler):
 			std::cout << "Explicit Euler";
 			break;
+
 		case static_cast<char>(time_differentiation_methods::implicit_euler):
 			std::cout << "Implicit Euler";
 			break;
+
 		default:
-			//throw;
-		std::cout << "No Selection";
+			std::cout << "No Selection";
 	}
 
 	std::cout << "\n\tUpwinding Spatial Accuracy = ";
@@ -452,12 +540,13 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		case static_cast<char>(upwinding_accuracy::first_order):
 			std::cout << "1st Order";
 			break;
+
 		case static_cast<char>(upwinding_accuracy::second_order):
 			std::cout << "2nd Order";
 			break;
+
 		default:
-			//throw;
-		std::cout << "No Selection" << std::endl;
+			std::cout << "No Selection" << std::endl;
 	}
 	std::cout << std::endl;
 
