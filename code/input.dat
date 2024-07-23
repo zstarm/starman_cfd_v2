@@ -76,9 +76,9 @@ TBC = { neumann neumann neumann neumann }
 TBV = { 0 0 0 0 }
 
 # INITIAL VALUES -----------------------------------------------------------
-Tinit = 0.0
+# *specify values for initial conditions (nondimensional)
 Pinit = 0.0
 Uinit = 0.0
 Vinit = 0.0
-
+Tinit = 0.0
 #---------------------------------------------------------------------------

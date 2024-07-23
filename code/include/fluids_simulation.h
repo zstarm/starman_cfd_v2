@@ -19,7 +19,9 @@ class sim_in_CFD_2D_cart : public simulation_input {
 		
 		double Re, Pe, qdot; //Reynolds number, Peclet number, and scaled heat generation
 
-		boundary_condition u_bc, v_bc, T_bc, p_bc;
+		double pinit, uinit, vinit, Tinit; //initial values for variables
+
+		boundary_condition u_bc, v_bc, T_bc, p_bc; //boundary conditions for variables
 
 		linear_system_solver_methods Psolver_type;
 		std::vector<double> Psolver_opts;

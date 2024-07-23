@@ -123,6 +123,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 				else if(name == "Pe") {
 					Pe = std::stod(str);
 				}
+				else if(name == "Pinit") {
+					pinit = std::stod(str);
+				}
 				else if(name == "Psolver") {
 					save_solver_selections(str, 'p');
 				}
@@ -162,6 +165,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 				else if(name == "TBV") {
 					save_boundary_input(T_bc, str, 'v');	
 				}
+				else if (name == "Tinit") {
+					Tinit = std::stod(str);
+				}
 				else if(name == "Tsolver") {
 					save_solver_selections(str, 'T');
 				}
@@ -181,6 +187,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 				else if(name == "Usolver") {
 					save_solver_selections(str, 'u');
 				}
+				else if(name == "Uinit") {
+					uinit = std::stod(str);
+				}
 				else {
 					throw std::logic_error("Unrecognized input identifier");
 				}
@@ -192,6 +201,9 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 				}
 				else if(name == "VBV") {
 					save_boundary_input(v_bc, str, 'v');	
+				}
+				else if(name == "Vinit") {
+					vinit = std::stod(str);
 				}
 				else {
 					throw std::logic_error("Unrecognized input identifier");
@@ -453,15 +465,20 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 
 	//BOUNDARIES
 	std::cout << "Boundary Conditions\n" << sect_break;
+	std::cout << "\nPressure\n"; 
+	p_bc.print_conditions();
 	std::cout << "\nU Velocity\n"; 
 	u_bc.print_conditions();
 	std::cout << "\nV Velocity\n"; 
 	v_bc.print_conditions();
 	std::cout << "\nTemperature\n"; 
 	T_bc.print_conditions();
-	std::cout << "\nPressure\n"; 
-	p_bc.print_conditions();
 	std::cout << sect_break << std::endl;
+
+	//BOUNDARIES
+	std::cout << "Initial Conditions\n" << sect_break;
+	std::cout << "\nPressure = " << pinit << "\nU Velocity = " << uinit << "\nV Velocity = " << vinit;
+	std::cout << "\nTemperature = " << Tinit << "\n" << sect_break << std::endl;
 
 	//SOLVER METHODS
 	std::cout << "Solver Methods\n" << sect_break;
