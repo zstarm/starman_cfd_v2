@@ -2,7 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <memory>
+#include <stdexcept>
+//#include <memory>
 
 ///////////////////////////////////
 // INPUT
@@ -18,6 +19,8 @@ class simulation_input {
 		std::string input_file_name;
 		simulation_mode mode_switch;
 		std::string simulation_title;
+
+		bool successful_load;
 		
 	public:
 		simulation_input();
@@ -76,7 +79,6 @@ enum class boundary_type : char {
 
 class boundary_condition {
 	private:
-
 		int N;
 		boundary_type* type; 
 		double* val;

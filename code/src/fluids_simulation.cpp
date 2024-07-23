@@ -238,6 +238,7 @@ void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type)
 							//throw 
 							break;
 						}
+						str.erase(0, pos + 1);
 					}
 				}
 				else if ( "SOR") {
@@ -252,6 +253,7 @@ void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type)
 							//throw 
 							break;
 						}
+						str.erase(0, pos + 1);
 					}
 				}
 				else {
@@ -381,18 +383,18 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 	//SOLVER METHODS
 	std::cout << "Solver Methods\n" << sect_break;
 	std::cout << "\nPressure Poisson Equation: Fractional Step";
-	std::cout << "\nLinear System Solver = ";
-	switch(static_cast<int>(Psolver_type)) {
-		case static_cast<int>(linear_system_solver_methods::LU):
+	std::cout << "\n\tSolver Method = ";
+	switch(static_cast<char>(Psolver_type)) {
+		case static_cast<char>(linear_system_solver_methods::LU):
 			std::cout << "LU Decomposition";
 			break;
-		case static_cast<int>(linear_system_solver_methods::GS):
+		case static_cast<char>(linear_system_solver_methods::GS):
 			std::cout << "Gauss-Seidel";
 			std::cout << "\n\tConvergence: " << Psolver_opts[0];
 			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
 			break;
-		case static_cast<int>(linear_system_solver_methods::SOR):
-			std::cout << "Gauss-Seidel";
+		case static_cast<char>(linear_system_solver_methods::SOR):
+			std::cout << "Successive Over-Relaxation";
 			std::cout << "\n\tConvergence: " << Psolver_opts[0];
 			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
 			std::cout << "\n\tWeight: " << Psolver_opts[2];
@@ -405,11 +407,11 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 
 	std::cout << "\nVelocity Schemes";
 	std::cout << "\n\tTime Differentiation = ";
-	switch(static_cast<int>(Usolver_type)) {
-		case static_cast<int>(time_differentiation_methods::explicit_euler):
+	switch(static_cast<char>(Usolver_type)) {
+		case static_cast<char>(time_differentiation_methods::explicit_euler):
 			std::cout << "Explicit Euler";
 			break;
-		case static_cast<int>(time_differentiation_methods::implicit_euler):
+		case static_cast<char>(time_differentiation_methods::implicit_euler):
 			std::cout << "Implicit Euler";
 			break;
 		default:
@@ -418,11 +420,11 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 	}
 
 	std::cout << "\n\tUpwinding Spatial Accuracy = ";
-	switch(static_cast<int>(Uadvect_acc)) {
-		case static_cast<int>(upwinding_accuracy::first_order):
+	switch(static_cast<char>(Uadvect_acc)) {
+		case static_cast<char>(upwinding_accuracy::first_order):
 			std::cout << "1st Order";
 			break;
-		case static_cast<int>(upwinding_accuracy::second_order):
+		case static_cast<char>(upwinding_accuracy::second_order):
 			std::cout << "2nd Order";
 			break;
 		default:
@@ -433,11 +435,11 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 
 	std::cout << "\nTemperature/Energy Schemes";
 	std::cout << "\n\tTime Differentiation = ";
-	switch(static_cast<int>(Tsolver_type)) {
-		case static_cast<int>(time_differentiation_methods::explicit_euler):
+	switch(static_cast<char>(Tsolver_type)) {
+		case static_cast<char>(time_differentiation_methods::explicit_euler):
 			std::cout << "Explicit Euler";
 			break;
-		case static_cast<int>(time_differentiation_methods::implicit_euler):
+		case static_cast<char>(time_differentiation_methods::implicit_euler):
 			std::cout << "Implicit Euler";
 			break;
 		default:
@@ -446,11 +448,11 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 	}
 
 	std::cout << "\n\tUpwinding Spatial Accuracy = ";
-	switch(static_cast<int>(Tadvect_acc)) {
-		case static_cast<int>(upwinding_accuracy::first_order):
+	switch(static_cast<char>(Tadvect_acc)) {
+		case static_cast<char>(upwinding_accuracy::first_order):
 			std::cout << "1st Order";
 			break;
-		case static_cast<int>(upwinding_accuracy::second_order):
+		case static_cast<char>(upwinding_accuracy::second_order):
 			std::cout << "2nd Order";
 			break;
 		default:
