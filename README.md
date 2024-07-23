@@ -8,21 +8,11 @@
 This code is 2D solver for the Navier-Stokes and unsteady heat/energy equation. A large portion of this code was originally written for completion of a course project for ME:7269 at the University of Iowa.
 I am now updating and maintaining this code base as a personal project.
 
-### Major Updates 
+### Latest Updates 
 
-### July 8,, 2024
-Initial git commit. I am starting to add portions of the original class project code into this repository. However, I will be updating the design of the code's structure to make development and scaling easier in the future. 
+### July 23, 2024
+Established a static library that includes base simulation classes that are used here to make an simulation input for 2D cartesian CFD simulations. An instance of the simulation input can so far read/parse the uniform grid info, desired number of time steps, selected solver methods, and specified boundary conditions. Additionally, the inputs can be printed to the console in a formatted way. Exceptions are used to handle any erroreous lines in the input file. 
 
-The main objective will be to develop a framework for the code such that it can be easily adapted and built upon and used for a large range of CFD and other PDE simulations. 
-
-**Planned Tasks**
-- Start developing base classes to be used.
-  	- SIMULATION CLASS: 
-        - Members: Input Parameter, Variable(s), Output File Handler
-        - Fuctionality: 
-            - Add variable(s)
-            - Change output file type
-            - Initialize variables
-            - Attach solver method to variable
-            - Write variables to output file
-            - Run simulation time step
+**Future Tasks**
+- Add ability to read in initial values for the 2D CFD simulation variables (P, U, V, and T)
+- Develop simulation variable class (base and child classes) to be used when running the simulation
