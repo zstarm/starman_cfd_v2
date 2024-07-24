@@ -69,7 +69,7 @@ class simulation {
 };
 */
 
-///////////////////////////////////
+//////////////////////////////////
 // BOUNDARY CONDITION
 ///////////////////////////////////
 
@@ -95,7 +95,6 @@ class boundary_condition {
 		void print_conditions();
 };
 
-
 ///////////////////////////////////
 // SIMULATION VARIABLES
 ///////////////////////////////////
@@ -112,4 +111,20 @@ class sim_variable {
 		sim_variable();
 		sim_variable(std::string name, int size);
 		~sim_variable();
+};
+
+///////////////////////////////////
+// SIMULATION 
+///////////////////////////////////
+
+class simulation {
+	protected:
+		simulation_input* INPUT;
+		//simulation_output* OUTPUT;
+
+		virtual void load_inputs(std::string& file);
+
+	public:
+		simulation(std::string ifname = "input.dat", std::string ofname = "output.dat");
+		~simulation();
 };

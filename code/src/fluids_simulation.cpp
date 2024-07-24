@@ -1,5 +1,9 @@
 #include <fluids_simulation.h>
 
+///////////////////////////////////
+// 2D CFD SIMULATION INPUT
+///////////////////////////////////
+
 sim_in_CFD_2D_cart::sim_in_CFD_2D_cart() : simulation_input("input.dat"), u_bc(4), v_bc(4), T_bc(4), p_bc(4) {}
 
 sim_in_CFD_2D_cart::sim_in_CFD_2D_cart(std::string infile) : simulation_input(infile), u_bc(4), v_bc(4), T_bc(4), p_bc(4) {}
@@ -232,6 +236,8 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 	}
 	
 	catch(const std::exception& e) {
+		successful_load = false; //make boolean false if an exception is thrown
+
 		std::cout << "Exception: " << e.what() << " \"" << name << "\"" << std::endl;
 	}
 }
@@ -283,10 +289,12 @@ void sim_in_CFD_2D_cart::save_boundary_input(boundary_condition& var, std::strin
 	}
 	
 	catch(const std::exception& e) {
+		successful_load = false; //make boolean false if exception is thrown
 		std::cout << "Exception: " << e.what() << std::endl;
 	}
 
 	catch(int) {
+		successful_load = false; //make boolean false if exception is thrown
 		std::cout << "Incorrect number of arguments specified for boundary condition" << std::endl;
 	}
 }
@@ -401,6 +409,7 @@ void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type)
 	}
 	
 	catch(const std::exception& e) {
+		successful_load = false; //make boolean false if exception is thrown
 		std::cout << "Exception: " << e.what() << std::endl; 
 	}
 }
@@ -410,6 +419,8 @@ void sim_in_CFD_2D_cart::read_input() {
    std::ifstream fs(input_file_name);
    try {
 	   if(fs.is_open()) {
+		  successful_load = true; //make boolean true (keep true unless exception is thrown)
+
 		  std::string line;
 		  while(!fs.eof()) {
 			 //starts reading lines from input file
@@ -451,122 +462,141 @@ void sim_in_CFD_2D_cart::read_input() {
 }
 
 void sim_in_CFD_2D_cart::print_input_parameters() {
-	std::string sect_break = "------------------------------------------------------";
-
-	std::cout << sect_break << "\nSIMULATION INPUTS\n" << sect_break << std::endl;
-
-	//GRID 
-	std::cout << "Grid Size\n" << sect_break << "\nI = " << Ni << "\nJ = " << Nj << std::endl;
-	std::cout << "dx = " << dx << "\ndy = " << dy << "\n" << sect_break << std::endl;
-
-	//TIME
-	std::cout << "Time Interation\n" << sect_break << "\nNt = " << Nt << "\nNskip = " << Nskip << std::endl;
-	std::cout << "dt = " << dt << "\n" << sect_break << std::endl;
-
-	//BOUNDARIES
-	std::cout << "Boundary Conditions\n" << sect_break;
-	std::cout << "\nPressure\n"; 
-	p_bc.print_conditions();
-	std::cout << "\nU Velocity\n"; 
-	u_bc.print_conditions();
-	std::cout << "\nV Velocity\n"; 
-	v_bc.print_conditions();
-	std::cout << "\nTemperature\n"; 
-	T_bc.print_conditions();
-	std::cout << sect_break << std::endl;
-
-	//BOUNDARIES
-	std::cout << "Initial Conditions\n" << sect_break;
-	std::cout << "\nPressure = " << pinit << "\nU Velocity = " << uinit << "\nV Velocity = " << vinit;
-	std::cout << "\nTemperature = " << Tinit << "\n" << sect_break << std::endl;
-
-	//SOLVER METHODS
-	std::cout << "Solver Methods\n" << sect_break;
-	std::cout << "\nPressure Poisson Equation: Fractional Step";
-	std::cout << "\n\tSolver Method = ";
-	switch(static_cast<char>(Psolver_type)) {
-		case static_cast<char>(linear_system_solver_methods::LU):
-			std::cout << "LU Decomposition";
-			break;
-			
-		case static_cast<char>(linear_system_solver_methods::GS):
-			std::cout << "Gauss-Seidel";
-			std::cout << "\n\tConvergence: " << Psolver_opts[0];
-			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
-			break;
-
-		case static_cast<char>(linear_system_solver_methods::SOR):
-			std::cout << "Successive Over-Relaxation";
-			std::cout << "\n\tConvergence: " << Psolver_opts[0];
-			std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
-			std::cout << "\n\tWeight: " << Psolver_opts[2];
-			break;
-
-		default:
-			std::cout << "No Selection";
-	}
-	std::cout << std::endl;
-
-	std::cout << "\nVelocity Schemes";
-	std::cout << "\n\tTime Differentiation = ";
-	switch(static_cast<char>(Usolver_type)) {
-		case static_cast<char>(time_differentiation_methods::explicit_euler):
-			std::cout << "Explicit Euler";
-			break;
-
-		case static_cast<char>(time_differentiation_methods::implicit_euler):
-			std::cout << "Implicit Euler";
-			break;
-
-		default:
-			std::cout << "No Selection" << std::endl;
-	}
-
-	std::cout << "\n\tUpwinding Spatial Accuracy = ";
-	switch(static_cast<char>(Uadvect_acc)) {
-		case static_cast<char>(upwinding_accuracy::first_order):
-			std::cout << "1st Order";
-			break;
-
-		case static_cast<char>(upwinding_accuracy::second_order):
-			std::cout << "2nd Order";
-			break;
-
-		default:
-			std::cout << "No Selection";
-	}
-	std::cout << std::endl;
-
-	std::cout << "\nTemperature/Energy Schemes";
-	std::cout << "\n\tTime Differentiation = ";
-	switch(static_cast<char>(Tsolver_type)) {
-		case static_cast<char>(time_differentiation_methods::explicit_euler):
-			std::cout << "Explicit Euler";
-			break;
-
-		case static_cast<char>(time_differentiation_methods::implicit_euler):
-			std::cout << "Implicit Euler";
-			break;
-
-		default:
-			std::cout << "No Selection";
-	}
-
-	std::cout << "\n\tUpwinding Spatial Accuracy = ";
-	switch(static_cast<char>(Tadvect_acc)) {
-		case static_cast<char>(upwinding_accuracy::first_order):
-			std::cout << "1st Order";
-			break;
-
-		case static_cast<char>(upwinding_accuracy::second_order):
-			std::cout << "2nd Order";
-			break;
-
-		default:
-			std::cout << "No Selection" << std::endl;
-	}
-	std::cout << std::endl;
-
-	std::cout << sect_break << std::endl;
+	//print out input parameters if no exceptions are thrown
+	if(successful_load) {
 	
+		std::string sect_break = "------------------------------------------------------";
+
+		std::cout << sect_break << "\nSIMULATION INPUTS\n" << sect_break << std::endl;
+
+		//GRID 
+		std::cout << "Grid Size\n" << sect_break << "\nI = " << Ni << "\nJ = " << Nj << std::endl;
+		std::cout << "dx = " << dx << "\ndy = " << dy << "\n" << sect_break << std::endl;
+
+		//TIME
+		std::cout << "Time Interation\n" << sect_break << "\nNt = " << Nt << "\nNskip = " << Nskip << std::endl;
+		std::cout << "dt = " << dt << "\n" << sect_break << std::endl;
+
+		//BOUNDARIES
+		std::cout << "Boundary Conditions\n" << sect_break;
+		std::cout << "\nPressure\n"; 
+		p_bc.print_conditions();
+		std::cout << "\nU Velocity\n"; 
+		u_bc.print_conditions();
+		std::cout << "\nV Velocity\n"; 
+		v_bc.print_conditions();
+		std::cout << "\nTemperature\n"; 
+		T_bc.print_conditions();
+		std::cout << sect_break << std::endl;
+
+		//BOUNDARIES
+		std::cout << "Initial Conditions\n" << sect_break;
+		std::cout << "\nPressure = " << pinit << "\nU Velocity = " << uinit << "\nV Velocity = " << vinit;
+		std::cout << "\nTemperature = " << Tinit << "\n" << sect_break << std::endl;
+
+		//SOLVER METHODS
+		std::cout << "Solver Methods\n" << sect_break;
+		std::cout << "\nPressure Poisson Equation: Fractional Step";
+		std::cout << "\n\tSolver Method = ";
+		switch(static_cast<char>(Psolver_type)) {
+			case static_cast<char>(linear_system_solver_methods::LU):
+				std::cout << "LU Decomposition";
+				break;
+				
+			case static_cast<char>(linear_system_solver_methods::GS):
+				std::cout << "Gauss-Seidel";
+				std::cout << "\n\tConvergence: " << Psolver_opts[0];
+				std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
+				break;
+
+			case static_cast<char>(linear_system_solver_methods::SOR):
+				std::cout << "Successive Over-Relaxation";
+				std::cout << "\n\tConvergence: " << Psolver_opts[0];
+				std::cout << "\n\tMax Iterations: " << static_cast<int>(Psolver_opts[1]);
+				std::cout << "\n\tWeight: " << Psolver_opts[2];
+				break;
+
+			default:
+				std::cout << "No Selection";
+		}
+		std::cout << std::endl;
+
+		std::cout << "\nVelocity Schemes";
+		std::cout << "\n\tTime Differentiation = ";
+		switch(static_cast<char>(Usolver_type)) {
+			case static_cast<char>(time_differentiation_methods::explicit_euler):
+				std::cout << "Explicit Euler";
+				break;
+
+			case static_cast<char>(time_differentiation_methods::implicit_euler):
+				std::cout << "Implicit Euler";
+				break;
+
+			default:
+				std::cout << "No Selection" << std::endl;
+		}
+
+		std::cout << "\n\tUpwinding Spatial Accuracy = ";
+		switch(static_cast<char>(Uadvect_acc)) {
+			case static_cast<char>(upwinding_accuracy::first_order):
+				std::cout << "1st Order";
+				break;
+
+			case static_cast<char>(upwinding_accuracy::second_order):
+				std::cout << "2nd Order";
+				break;
+
+			default:
+				std::cout << "No Selection";
+		}
+		std::cout << std::endl;
+
+		std::cout << "\nTemperature/Energy Schemes";
+		std::cout << "\n\tTime Differentiation = ";
+		switch(static_cast<char>(Tsolver_type)) {
+			case static_cast<char>(time_differentiation_methods::explicit_euler):
+				std::cout << "Explicit Euler";
+				break;
+
+			case static_cast<char>(time_differentiation_methods::implicit_euler):
+				std::cout << "Implicit Euler";
+				break;
+
+			default:
+				std::cout << "No Selection";
+		}
+
+		std::cout << "\n\tUpwinding Spatial Accuracy = ";
+		switch(static_cast<char>(Tadvect_acc)) {
+			case static_cast<char>(upwinding_accuracy::first_order):
+				std::cout << "1st Order";
+				break;
+
+			case static_cast<char>(upwinding_accuracy::second_order):
+				std::cout << "2nd Order";
+				break;
+
+			default:
+				std::cout << "No Selection" << std::endl;
+		}
+		std::cout << std::endl;
+
+		std::cout << sect_break << std::endl;
+	}	
+}
+
+///////////////////////////////////
+// 2D CFD SIMULATION 
+///////////////////////////////////
+
+fluid_sim_2D::fluid_sim_2D(std::string ifname, std::string ofname) : simulation(ifname, ofname) {
+	load_inputs(ifname); //load inputs of the desired simulation type into the class
+}
+
+fluid_sim_2D::~fluid_sim_2D() {}
+
+void fluid_sim_2D::load_inputs(std::string& file) {
+	//creates new instance of the specified input class
+	INPUT = new sim_in_CFD_2D_cart(file);
+	INPUT->read_input();
 }

@@ -57,15 +57,14 @@ class pressure : sim_variable {};
 ///////////////////////////////////
 // SIMULATION
 ///////////////////////////////////
-/*
+
 class fluid_sim_2D : public simulation {
 	private:
-
+		void load_inputs(std::string& file) override;
 	public:
-		fluid_sim_2D();
-		fluid_sim_2D(std::string input_file);
+		fluid_sim_2D(std::string ifname = "input.dat", std::string ofname = "output.dat");
 		~fluid_sim_2D();
 
 
 };
-*/
+
