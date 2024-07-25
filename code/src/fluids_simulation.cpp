@@ -55,8 +55,7 @@ void sim_in_CFD_2D_cart::parse_infile_line(std::string & str, char delim) {
 					dy = std::stod(str);
 				}
 				else {
-					throw std::logic_error("Unrecognized input identifier");
-				}
+					throw std::logic_error("Unrecognized input identifier"); }
 				break;
 
 			case 'e':
@@ -415,21 +414,20 @@ void sim_in_CFD_2D_cart::save_solver_selections(std::string& str, char var_type)
 }
 
 void sim_in_CFD_2D_cart::read_input() {
-   //opens file name of the input file
-   std::ifstream fs(input_file_name);
-   try {
-	   if(fs.is_open()) {
-		  successful_load = true; //make boolean true (keep true unless exception is thrown)
-
-		  std::string line;
-		  while(!fs.eof()) {
-			 //starts reading lines from input file
-			 std::getline(fs,line);
-			 //skip empty lines or commeted lines (beginning with #)
-			 if(line[0] != '#' && line[0] != '\r' && !line.empty()) {
-				parse_infile_line(line, '=');
-			 }
-		  }
+	//opens file name of the input file
+	std::ifstream fs(input_file_name);
+	try {
+		if(fs.is_open()) {
+			successful_load = true; //make boolean true (keep true unless exception is thrown)
+			std::string line;
+			while(!fs.eof()) {
+				//starts reading lines from input file
+			 	std::getline(fs,line);
+			 	//skip empty lines or commeted lines (beginning with #)
+			 	if(line[0] != '#' && line[0] != '\r' && !line.empty()) {
+					parse_infile_line(line, '=');
+			 	}
+			}
 
 		  /*
 		  //reset the time step size based on Pe number if "-1" option is selected
@@ -447,17 +445,18 @@ void sim_in_CFD_2D_cart::read_input() {
 			 }
 		  }
 		  */
-	   }
+		}
 
 	   //returns error message if input file cannot be opened 
-	   else {
-		   throw std::runtime_error("Could not open file \"" + input_file_name + "\"");
-	   }
-   }
 
-   catch(std::exception& e) {
-	   std::cout << "Exception: " << e.what() << std::endl;
-   }
+		else {
+			throw std::runtime_error("Could not open file \"" + input_file_name + "\"");
+		}
+	}
+
+	catch(std::exception& e) {
+		std::cout << "Exception: " << e.what() << std::endl;
+	}
 
 }
 
@@ -586,17 +585,62 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 }
 
 ///////////////////////////////////
+// 2D CFD SIMULATION VARIABLES 
+///////////////////////////////////
+
+//PRESSURE
+pressure::pressure() {}
+
+pressure::~pressure() {}
+
+//VELOCITY
+velocity::velocity() {}
+
+velocity::~velocity() {}
+
+//TEMPERATURE
+temperature::temperature() {}
+
+temperature::~temperature() {}
+
+///////////////////////////////////
 // 2D CFD SIMULATION 
 ///////////////////////////////////
 
+typedef sim_in_CFD_2D_cart SIMIN;
 fluid_sim_2D::fluid_sim_2D(std::string ifname, std::string ofname) : simulation(ifname, ofname) {
-	load_inputs(ifname); //load inputs of the desired simulation type into the class
+	INPUT = new sim_in_CFD_2D_cart(ifname);
+	load_inputs();
+	if(static_cast<SIMIN*>(INPUT)->successful_load) {
+		setup_variables();
+	}
+	else {
+		std::cout << "Error loading inputs! Could not set up variables" << std::endl;
+	}
+
 }
 
-fluid_sim_2D::~fluid_sim_2D() {}
-
-void fluid_sim_2D::load_inputs(std::string& file) {
-	//creates new instance of the specified input class
-	INPUT = new sim_in_CFD_2D_cart(file);
-	INPUT->read_input();
+fluid_sim_2D::~fluid_sim_2D() {
+	std::cout << "Simulation Deconstructed" << std::endl;
 }
+
+void fluid_sim_2D::setup_variables() {
+
+	//get size of variables from input
+	int_size = (static_cast<SIMIN*>(INPUT)->Ni - 2) * (static_cast<SIMIN*>(INPUT)->Nj - 2);
+	ext_size = (static_cast<SIMIN*>(INPUT)->Ni)*(static_cast<SIMIN*>(INPUT)->Nj) - int_size;
+	
+	//apply size to variable container
+	p.set_size(int_size);
+	u.set_size(int_size);
+	v.set_size(int_size);
+	T.set_size(int_size);
+
+	//set variable names
+	p.set_name("Pressure");
+	u.set_name("U Velocity");
+	v.set_name("V Velocity"); 
+	T.set_name("Temperature");
+
+}
+

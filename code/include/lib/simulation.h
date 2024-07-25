@@ -15,6 +15,7 @@ enum class simulation_mode : int  {
 };
 
 class simulation_input {
+	friend class simulation;
 	protected:
 		std::string input_file_name;
 		simulation_mode mode_switch;
@@ -101,16 +102,21 @@ class boundary_condition {
 
 class sim_variable {
 	private:
-		std::string var_name;
 
 	protected:
+		std::string var_name;
 		double* content;
 		int size;
+
+		void allocate_memory();
 
 	public:
 		sim_variable();
 		sim_variable(std::string name, int size);
 		~sim_variable();
+
+		void set_name(std::string name);
+		void set_size(int s);
 };
 
 ///////////////////////////////////
@@ -122,7 +128,7 @@ class simulation {
 		simulation_input* INPUT;
 		//simulation_output* OUTPUT;
 
-		virtual void load_inputs(std::string& file);
+		void load_inputs();
 
 	public:
 		simulation(std::string ifname = "input.dat", std::string ofname = "output.dat");

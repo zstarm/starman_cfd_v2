@@ -45,26 +45,58 @@ class sim_in_CFD_2D_cart : public simulation_input {
 };
 
 ///////////////////////////////////
-// VARIABLES
+// 2D CFD SIMULATION VARIABLES
 ///////////////////////////////////
 
-class velocity : sim_variable  {};
+class pressure : sim_variable {
+	friend class fluid_sim_2D;
+	
+	private:
 
-class temperature : sim_variable {};
+	public:
+		pressure();
+		~pressure();
+}; 
 
-class pressure : sim_variable {}; 
+class velocity : sim_variable {
+	friend class fluid_sim_2D;
 
+	private:
+
+	public:
+		velocity();
+		~velocity();
+
+};
+
+class temperature : sim_variable {
+	friend class fluid_sim_2D;
+
+	private:
+
+	public:
+		temperature();
+		~temperature();
+};
 ///////////////////////////////////
-// SIMULATION
+// 2D CFD SIMULATION
 ///////////////////////////////////
 
 class fluid_sim_2D : public simulation {
 	private:
-		void load_inputs(std::string& file) override;
+		int int_size, ext_size;
+
+		pressure p;
+		velocity u, v;
+		temperature T;
+
+		//void load_inputs(std::string& file) override;
+
+		void setup_variables();
+
 	public:
 		fluid_sim_2D(std::string ifname = "input.dat", std::string ofname = "output.dat");
 		~fluid_sim_2D();
-
 
 };
 
