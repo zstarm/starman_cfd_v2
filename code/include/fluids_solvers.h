@@ -1,5 +1,5 @@
 #pragma once
-#include <lib/simulation.h>
+#include <lib/schemes.h>
 
 ///////////////////////////////////
 // SOLVER OPTIONS ENUMERATIONS
@@ -22,4 +22,16 @@ enum class upwinding_accuracy : char {
 	None, //No method select
 	first_order,
 	second_order 
+};
+
+///////////////////////////////////
+// SOLVER SCHEMES
+///////////////////////////////////
+
+class gauss_seidel : public scheme {
+	public:
+		gauss_seidel();
+		~gauss_seidel();
+
+		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
 };

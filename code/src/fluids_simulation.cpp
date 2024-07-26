@@ -611,11 +611,12 @@ typedef sim_in_CFD_2D_cart SIMIN;
 fluid_sim_2D::fluid_sim_2D(std::string ifname, std::string ofname) : simulation(ifname, ofname) {
 	INPUT = new sim_in_CFD_2D_cart(ifname);
 	load_inputs();
-	if(static_cast<SIMIN*>(INPUT)->successful_load) {
+	if(INPUT->check_load()) {
 		setup_variables();
+		setup_schemes();
 	}
 	else {
-		std::cout << "Error loading inputs! Could not set up variables" << std::endl;
+		std::cout << "Error loading inputs! Could not setup 2D fluid dynamics case" << std::endl;
 	}
 
 }
@@ -642,5 +643,9 @@ void fluid_sim_2D::setup_variables() {
 	v.set_name("V Velocity"); 
 	T.set_name("Temperature");
 
+}
+
+void fluid_sim_2D::setup_schemes() {
+	p.select_solver(new gauss_seidel); 
 }
 

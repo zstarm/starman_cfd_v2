@@ -3,7 +3,9 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
-//#include <memory>
+#include <memory>
+
+#include "schemes.h"
 
 ///////////////////////////////////
 // INPUT
@@ -38,6 +40,8 @@ class simulation_input {
 		void print_fname();
 		void print_mode();
 		void print_title();
+
+		bool check_load();
 };
 /*
 ///////////////////////////////////
@@ -104,9 +108,11 @@ class sim_variable {
 	private:
 
 	protected:
+		int size;
 		std::string var_name;
 		double* content;
-		int size;
+		boundary_condition* BCs;
+		scheme* solver;
 
 		void allocate_memory();
 
@@ -117,6 +123,11 @@ class sim_variable {
 
 		void set_name(std::string name);
 		void set_size(int s);
+
+		void initialize(double value);
+		void attach_boundary_conditions(boundary_condition* boundaries);
+		void select_solver(scheme* s);
+
 };
 
 ///////////////////////////////////

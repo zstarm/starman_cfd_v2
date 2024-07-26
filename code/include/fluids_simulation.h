@@ -90,9 +90,8 @@ class fluid_sim_2D : public simulation {
 		velocity u, v;
 		temperature T;
 
-		//void load_inputs(std::string& file) override;
-
 		void setup_variables();
+		void setup_schemes();
 
 	public:
 		fluid_sim_2D(std::string ifname = "input.dat", std::string ofname = "output.dat");
