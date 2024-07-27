@@ -28,10 +28,36 @@ enum class upwinding_accuracy : char {
 // SOLVER SCHEMES
 ///////////////////////////////////
 
+//LINEAR SYSTEMS/IMPLICIT SOLVERS
+class LUDecomp : public scheme {
+	public:
+		LUDecomp();
+		~LUDecomp();
+
+		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+};
+
 class gauss_seidel : public scheme {
 	public:
 		gauss_seidel();
 		~gauss_seidel();
+
+		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+};
+
+class SOR : public gauss_seidel {
+	public:
+		SOR();
+		~SOR();
+
+		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+};
+
+//UNSTEADY SOLVERS
+class explicit_first_order_upwinding : public scheme {
+	public:
+		explicit_first_order_upwinding();
+		~explicit_first_order_upwinding();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
 };
