@@ -16,4 +16,3 @@ Established a static library that includes base simulation classes that are used
 **Future Tasks**
 - Add ability to read in initial values for the 2D CFD simulation variables (P, U, V, and T)
 - Develop simulation variable class (base and child classes) to be used when running the simulation
-- TEST

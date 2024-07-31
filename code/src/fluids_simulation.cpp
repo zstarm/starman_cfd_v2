@@ -593,6 +593,10 @@ pressure::pressure() {}
 
 pressure::~pressure() {}
 
+void pressure::run() {
+	solver->test();
+}
+
 //VELOCITY
 velocity::velocity() {}
 
@@ -646,6 +650,8 @@ void fluid_sim_2D::setup_variables() {
 }
 
 void fluid_sim_2D::setup_schemes() {
-	p.select_solver(new gauss_seidel); 
+	p.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->p_bc);
+	p.select_solver(new gauss_seidel);
+	p.run();
 }
 

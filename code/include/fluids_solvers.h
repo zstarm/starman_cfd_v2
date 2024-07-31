@@ -43,6 +43,8 @@ class gauss_seidel : public scheme {
 		~gauss_seidel();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+
+		void test() override;
 };
 
 class SOR : public gauss_seidel {

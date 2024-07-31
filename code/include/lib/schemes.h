@@ -16,6 +16,7 @@ class scheme {
 
 		void setup_scheme(int* soln_size, int Nparams, double** params);
 		virtual void solve_point(int ind, double* var, int Ndepend, double** dependicies);
+		virtual void test();
 		void update_var(int ind, double* var);
 };
 

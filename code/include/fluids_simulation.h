@@ -56,6 +56,8 @@ class pressure : sim_variable {
 	public:
 		pressure();
 		~pressure();
+
+		void run();
 }; 
 
 class velocity : sim_variable {

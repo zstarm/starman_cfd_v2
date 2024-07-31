@@ -18,6 +18,10 @@ gauss_seidel::~gauss_seidel() {}
 
 void gauss_seidel::solve_point(int ind, double* var, int Ndepend, double** dependicies) {}
 
+void gauss_seidel::test() {
+	std::cout << "GS - RUN TEST" << std::endl;
+}
+
 //SUCCESSIVE OVER-RELAXATION 
 SOR::SOR() {}
 
