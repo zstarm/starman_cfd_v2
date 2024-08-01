@@ -641,6 +641,12 @@ void fluid_sim_2D::setup_variables() {
 	v.set_size(int_size);
 	T.set_size(int_size);
 
+	//attach boundary conditions to variable
+	p.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->p_bc);
+	u.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->u_bc);
+	v.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->v_bc);
+	T.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->T_bc);
+
 	//set variable names
 	p.set_name("Pressure");
 	u.set_name("U Velocity");
@@ -650,8 +656,73 @@ void fluid_sim_2D::setup_variables() {
 }
 
 void fluid_sim_2D::setup_schemes() {
-	p.attach_boundary_conditions(&static_cast<SIMIN*>(INPUT)->p_bc);
-	p.select_solver(new gauss_seidel);
-	p.run();
+	//Pressure solver
+	switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Psolver_type)) {
+		case static_cast<char>(linear_system_solver_methods::LU):
+			break;
+			
+		case static_cast<char>(linear_system_solver_methods::GS):
+			p.select_solver(new gauss_seidel);
+			p.solver->setup_scheme(&int_size, 2, &static_cast<SIMIN*>(INPUT)->Psolver_opts[0]);
+			break;
+
+		case static_cast<char>(linear_system_solver_methods::SOR):
+			p.select_solver(new SOR);
+			p.solver->setup_scheme(&int_size, 3, &static_cast<SIMIN*>(INPUT)->Psolver_opts[0]);
+			break;
+
+		default:
+			std::cout << "No Selection";
+	}
+
+	//Velocity solvers
+	switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Usolver_type)) {
+		case static_cast<char>(time_differentiation_methods::explicit_euler):
+			switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Uadvect_acc)) {
+				case static_cast<char>(upwinding_accuracy::first_order):
+					u.select_solver(new explicit_first_order_upwinding);
+					u.solver->setup_scheme(&int_size, 0, NULL);
+					v.select_solver(new explicit_first_order_upwinding);
+					v.solver->setup_scheme(&int_size, 0, NULL);
+					break;
+
+				case static_cast<char>(upwinding_accuracy::second_order):
+					break;
+
+				default:;
+
+			}
+			break;
+			
+		case static_cast<char>(time_differentiation_methods::implicit_euler):
+			break;
+		
+		default:
+			std::cout << "No Selection";
+	}
+
+	//Temperature/Energy solver
+	switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Tsolver_type)) {
+		case static_cast<char>(time_differentiation_methods::explicit_euler):
+			switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Tadvect_acc)) {
+				case static_cast<char>(upwinding_accuracy::first_order):
+					T.select_solver(new explicit_first_order_upwinding);
+					T.solver->setup_scheme(&int_size, 0, NULL);
+					break;
+
+				case static_cast<char>(upwinding_accuracy::second_order):
+					break;
+
+				default:;
+
+			}
+			break;
+			
+		case static_cast<char>(time_differentiation_methods::implicit_euler):
+			break;
+		
+		default:
+			std::cout << "No Selection";
+	}
 }
 
