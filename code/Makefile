@@ -20,7 +20,7 @@ run\ v : $(BIN)/$(EXECUTABLE)
 	clear
 	./$(BIN)/$(EXECUTABLE) -v true
 
-run\ l :
+run\ l : $(BIN)/$(EXECUTABLE)
 	./$(BIN)/$(EXECUTABLE) -v true | cat > log.txt
 
 clean:
