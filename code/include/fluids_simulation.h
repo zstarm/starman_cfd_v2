@@ -99,5 +99,7 @@ class fluid_sim_2D : public simulation {
 		fluid_sim_2D(std::string ifname = "input.dat", std::string ofname = "output.dat");
 		~fluid_sim_2D();
 
+		void print_inputs();
+
 };
 

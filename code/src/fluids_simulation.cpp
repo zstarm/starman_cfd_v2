@@ -488,10 +488,14 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 		T_bc.print_conditions();
 		std::cout << sect_break << std::endl;
 
-		//BOUNDARIES
-		std::cout << "Initial Conditions\n" << sect_break;
-		std::cout << "\nPressure = " << pinit << "\nU Velocity = " << uinit << "\nV Velocity = " << vinit;
-		std::cout << "\nTemperature = " << Tinit << "\n" << sect_break << std::endl;
+		//INITIAL CONDITIONS
+		std::cout << "NONDIMENSIONAL PARAMETERS\n" << sect_break;
+		std::cout << "\nReynolds Number = " << Re << "\nPeclet Number = " << Pe; 
+		std::cout << "\nScaled Heat Generation = " << qdot << "\n" << sect_break << std::endl;
+
+		//TIME
+		std::cout << "Time Interation\n" << sect_break << "\nNt = " << Nt << "\nNskip = " << Nskip << std::endl;
+		std::cout << "dt = " << dt << "\n" << sect_break << std::endl;
 
 		//SOLVER METHODS
 		std::cout << "Solver Methods\n" << sect_break;
@@ -656,6 +660,15 @@ void fluid_sim_2D::setup_variables() {
 }
 
 void fluid_sim_2D::setup_schemes() {
+	//Constant parameters to be given to solver
+	double* Re_ptr = &static_cast<SIMIN*>(INPUT)->Re;
+	double* Pe_ptr = &static_cast<SIMIN*>(INPUT)->Pe;
+	double* q_ptr = &static_cast<SIMIN*>(INPUT)->qdot;
+	double* dx_ptr = &static_cast<SIMIN*>(INPUT)->dx;
+	double* dy_ptr = &static_cast<SIMIN*>(INPUT)->dy;
+	double* dt_ptr = &static_cast<SIMIN*>(INPUT)->dt;
+	double * P_opts = &static_cast<SIMIN*>(INPUT)->Psolver_opts[0];
+
 	//Pressure solver
 	switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Psolver_type)) {
 		case static_cast<char>(linear_system_solver_methods::LU):
@@ -663,12 +676,21 @@ void fluid_sim_2D::setup_schemes() {
 			
 		case static_cast<char>(linear_system_solver_methods::GS):
 			p.select_solver(new gauss_seidel);
-			p.solver->setup_scheme(&int_size, 2, &static_cast<SIMIN*>(INPUT)->Psolver_opts[0]);
+			//P_ptrs = new double*[2];
+			static_cast<gauss_seidel*>(p.solver)->set_convergence(&P_opts[0]);
+			static_cast<gauss_seidel*>(p.solver)->set_max_iters(&P_opts[1]);
+			p.solver->setup_scheme(&int_size, 0, NULL);
+			//delete[] P_ptrs;
 			break;
 
 		case static_cast<char>(linear_system_solver_methods::SOR):
 			p.select_solver(new SOR);
-			p.solver->setup_scheme(&int_size, 3, &static_cast<SIMIN*>(INPUT)->Psolver_opts[0]);
+			//P_ptrs = new double*[3];
+			static_cast<SOR*>(p.solver)->set_convergence(&P_opts[0]);
+			static_cast<SOR*>(p.solver)->set_max_iters(&P_opts[1]);
+			static_cast<SOR*>(p.solver)->set_weight(&P_opts[2]);
+			p.solver->setup_scheme(&int_size, 0, NULL);
+			//delete[] P_ptrs;
 			break;
 
 		default:
@@ -681,9 +703,15 @@ void fluid_sim_2D::setup_schemes() {
 			switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Uadvect_acc)) {
 				case static_cast<char>(upwinding_accuracy::first_order):
 					u.select_solver(new explicit_first_order_upwinding);
-					u.solver->setup_scheme(&int_size, 0, NULL);
+					static_cast<explicit_first_order_upwinding*>(u.solver)->set_Re(Re_ptr);
+					static_cast<explicit_first_order_upwinding*>(u.solver)->set_Pe(NULL);
+					static_cast<explicit_first_order_upwinding*>(u.solver)->set_q(NULL);
+					u.solver->setup_scheme(&int_size, 0, NULL );
 					v.select_solver(new explicit_first_order_upwinding);
-					v.solver->setup_scheme(&int_size, 0, NULL);
+					static_cast<explicit_first_order_upwinding*>(v.solver)->set_Re(Re_ptr);
+					static_cast<explicit_first_order_upwinding*>(v.solver)->set_Pe(NULL);
+					static_cast<explicit_first_order_upwinding*>(v.solver)->set_q(NULL);
+					v.solver->setup_scheme(&int_size, 0, NULL );
 					break;
 
 				case static_cast<char>(upwinding_accuracy::second_order):
@@ -707,7 +735,10 @@ void fluid_sim_2D::setup_schemes() {
 			switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Tadvect_acc)) {
 				case static_cast<char>(upwinding_accuracy::first_order):
 					T.select_solver(new explicit_first_order_upwinding);
-					T.solver->setup_scheme(&int_size, 0, NULL);
+					static_cast<explicit_first_order_upwinding*>(T.solver)->set_Re(NULL);
+					static_cast<explicit_first_order_upwinding*>(T.solver)->set_Pe(Pe_ptr);
+					static_cast<explicit_first_order_upwinding*>(T.solver)->set_q(q_ptr);
+					T.solver->setup_scheme(&int_size, 0, NULL );
 					break;
 
 				case static_cast<char>(upwinding_accuracy::second_order):
@@ -724,5 +755,10 @@ void fluid_sim_2D::setup_schemes() {
 		default:
 			std::cout << "No Selection";
 	}
+
+	p.run();
 }
 
+void fluid_sim_2D::print_inputs() {
+	INPUT->print_input_parameters();
+}
