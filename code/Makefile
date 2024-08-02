@@ -11,9 +11,17 @@ EXECUTABLE  := main.exe
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CC) -std=$(STD) $(CFLAG) -I./$(INCLUDE) $^ -o $@ -L./$(INCLUDE)/lib/ -l$(LIBRARIES)
+
 run : $(BIN)/$(EXECUTABLE)
 	clear
 	./$(BIN)/$(EXECUTABLE)
 
+run\ v : $(BIN)/$(EXECUTABLE)
+	clear
+	./$(BIN)/$(EXECUTABLE) -v true
+
+run\ l :
+	./$(BIN)/$(EXECUTABLE) -v true | cat > log.txt
+
 clean:
-	-rm $(BIN)/$(EXECUTABLE)
+	-rm $(BIN)/$(EXECUTABLE) log.txt 
