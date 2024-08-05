@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <memory>
 
 #include <fluids_solvers.h>

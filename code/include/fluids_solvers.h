@@ -31,40 +31,39 @@ enum class upwinding_accuracy : char {
 //LINEAR SYSTEMS/IMPLICIT SOLVERS
 class LUDecomp : public scheme {
 	protected:
-		double** A, L, U;
-		double* y, b;
+		double *A, **L, **U;
+		double *y, *b;
 	public:
 		LUDecomp();
 		~LUDecomp();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
 
 class gauss_seidel : public scheme {
 	protected:
-		double* convergence;
-		double* max_iters;
+		double *convergence, *max_iters;
 	public:
 		gauss_seidel();
 		~gauss_seidel();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 
 		void test() override;
-		void set_convergence(double* c);
-		void set_max_iters(double* N);
 };
 
 class SOR : public gauss_seidel {
 	protected:
-		double* weight;
+		double *weight;
 	public:
 		SOR();
 		~SOR();
 	
 		void test() override;
-		void set_weight(double* w);
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
+		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
 
 //UNSTEADY SOLVERS
@@ -76,7 +75,5 @@ class explicit_first_order_upwinding : public scheme {
 		~explicit_first_order_upwinding();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
-		void set_Re(double* R);
-		void set_Pe(double* P);
-		void set_q(double* q);
+		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
