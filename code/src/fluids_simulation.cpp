@@ -669,7 +669,7 @@ void fluid_sim_2D::setup_schemes() {
 	double* dt_ptr = &static_cast<SIMIN*>(INPUT)->dt;
 	std::vector<double*> advect_scheme_params = {dx_ptr, dy_ptr, dt_ptr, Re_ptr, Pe_ptr, q_ptr};
 	std::vector<double*> press_scheme_params = {dx_ptr, dy_ptr, dt_ptr};
-	for(int i = 0; i < static_cast<SIMIN*>(INPUT)->Psolver_opts.size(); i++) {
+	for(int i = 0; i < (int)static_cast<SIMIN*>(INPUT)->Psolver_opts.size(); i++) {
 		press_scheme_params.push_back(&static_cast<SIMIN*>(INPUT)->Psolver_opts[i]);
 	}
 
