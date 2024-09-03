@@ -588,22 +588,6 @@ void sim_in_CFD_2D_cart::print_input_parameters() {
 	}	
 }
 
-std::vector<double>* sim_in_CFD_2D_cart::get_pressure_solver_opts() {
-	return &Psolver_opts;
-}
-
-double* sim_in_CFD_2D_cart::get_reynolds_num() {
-	return &Re;
-}
-
-double* sim_in_CFD_2D_cart::get_peclet_num() {
-	return &Pe;
-}
-
-double* sim_in_CFD_2D_cart::get_heat_gen() {
-	return &qdot;
-}
-
 ///////////////////////////////////
 // 2D CFD SIMULATION VARIABLES 
 ///////////////////////////////////
@@ -676,17 +660,19 @@ void fluid_sim_2D::setup_variables() {
 }
 
 void fluid_sim_2D::setup_schemes() {
-	//Constant parameters to be given to solver
+	//parameters to be given to solver
 	double* Re_ptr = &static_cast<SIMIN*>(INPUT)->Re;
 	double* Pe_ptr = &static_cast<SIMIN*>(INPUT)->Pe;
 	double* q_ptr = &static_cast<SIMIN*>(INPUT)->qdot;
 	double* dx_ptr = &static_cast<SIMIN*>(INPUT)->dx;
 	double* dy_ptr = &static_cast<SIMIN*>(INPUT)->dy;
 	double* dt_ptr = &static_cast<SIMIN*>(INPUT)->dt;
-	//double* P_opts = &static_cast<SIMIN*>(INPUT)->Psolver_opts;
 	std::vector<double*> advect_scheme_params = {dx_ptr, dy_ptr, dt_ptr, Re_ptr, Pe_ptr, q_ptr};
 	std::vector<double*> press_scheme_params = {dx_ptr, dy_ptr, dt_ptr};
-	press_scheme_params.insert(press_scheme_params.end(), static_cast<SIMIN*>(INPUT)->Psolver_opts.begin(),  static_cast<SIMIN*>(INPUT)->Psolver_opts.end());
+	for(int i = 0; i < static_cast<SIMIN*>(INPUT)->Psolver_opts.size(); i++) {
+		press_scheme_params.push_back(&static_cast<SIMIN*>(INPUT)->Psolver_opts[i]);
+	}
+
 
 	//Pressure solver
 	switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Psolver_type)) {
@@ -701,7 +687,6 @@ void fluid_sim_2D::setup_schemes() {
 
 		case static_cast<char>(linear_system_solver_methods::SOR):
 			p.select_solver(new SOR);
-			//p.solver->setup_scheme(&int_size, 3, (double* []){&P_opts[0], &P_opts[1], &P_opts[2]});
 			p.solver->set_soln_size(&int_size);
 			p.solver->set_scheme_params(press_scheme_params);
 			break;
@@ -715,11 +700,11 @@ void fluid_sim_2D::setup_schemes() {
 			switch(static_cast<char>(static_cast<SIMIN*>(INPUT)->Uadvect_acc)) {
 				case static_cast<char>(upwinding_accuracy::first_order):
 					u.select_solver(new explicit_first_order_upwinding);
-					//u.solver->setup_scheme(&int_size, 3, (double* []){Re_ptr, Pe_ptr, q_ptr});
 					v.select_solver(new explicit_first_order_upwinding);
-					//v.solver->setup_scheme(&int_size, 3, (double* []){Re_ptr, Pe_ptr, q_ptr});
+			
 					u.solver->set_soln_size(&int_size);
 					v.solver->set_soln_size(&int_size);
+				
 					u.solver->set_scheme_params(advect_scheme_params);
 					v.solver->set_scheme_params(advect_scheme_params);
 					break;
@@ -745,7 +730,6 @@ void fluid_sim_2D::setup_schemes() {
 				case static_cast<char>(upwinding_accuracy::first_order):
 					T.select_solver(new explicit_first_order_upwinding);
 					T.solver->set_soln_size(&int_size);
-					//T.solver->setup_scheme(&int_size, 3, (double* []){Re_ptr, Pe_ptr, q_ptr});
 					T.solver->set_scheme_params(advect_scheme_params);
 					break;
 

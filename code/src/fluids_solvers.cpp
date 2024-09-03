@@ -1,8 +1,6 @@
 #include <fluids_solvers.h>
 
 ///////////////////////////////////
-// SOLVER SCHEMES
-///////////////////////////////////
 
 //LU DECOMPOSITION
 LUDecomp::LUDecomp() {}
@@ -20,7 +18,9 @@ void gauss_seidel::solve_point(int ind, double* var, int Ndepend, double** depen
 
 void gauss_seidel::test() {
 	std::cout << "GS - RUN TEST" << std::endl;
-	std::cout << *convergence << std::endl;
+	for(int i = 0; i < num_params; i++) {
+		std::cout << *param_ptrs[i] << std::endl;
+	}
 }
 
 //SUCCESSIVE OVER-RELAXATION 
@@ -28,13 +28,14 @@ SOR::SOR() {}
 
 SOR::~SOR() {}
 
-
 void SOR::solve_point(int ind, double* var, int Ndepend, double** dependicies) {
 }
 
 void SOR::test() {
 	std::cout << "SOR - RUN TEST" << std::endl;
-	std::cout << *weight << std::endl;
+	for(int i = 0; i < num_params; i++) {
+		std::cout << *param_ptrs[i] << std::endl;
+	}
 }
 
 //EXPLICIT UPWINDING (FIRST ORDER)

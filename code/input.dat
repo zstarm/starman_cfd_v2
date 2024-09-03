@@ -28,7 +28,7 @@ Nskip = 500
 #
 # 		"LU" : LU decomposition
 
-Psolver = { SOR 0.0001 150 1.2 }
+Psolver = { GS 0.0001 150 1.2 }
 
 # VELOCITY (upwinding)
 #	METHODS AVAIL : "EXPLICIT"
