@@ -1,5 +1,10 @@
-#pragma once
-#include <lib/schemes.h>
+#ifndef FLUIDS_SOLVER_H
+#define FLUIDS_SOLVER_H
+
+#include <vector>
+
+#include "lib/simulation.h"
+#include "lib/schemes.h"
 
 ///////////////////////////////////
 // SOLVER OPTIONS ENUMERATIONS
@@ -38,7 +43,6 @@ class LUDecomp : public scheme {
 		~LUDecomp();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
-		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
 
 class gauss_seidel : public scheme {
@@ -49,7 +53,6 @@ class gauss_seidel : public scheme {
 		~gauss_seidel();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
-		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 
 		void test() override;
 };
@@ -63,7 +66,6 @@ class SOR : public gauss_seidel {
 	
 		void test() override;
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
-		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
 
 //UNSTEADY SOLVERS
@@ -75,5 +77,6 @@ class explicit_first_order_upwinding : public scheme {
 		~explicit_first_order_upwinding();
 
 		void solve_point(int ind, double* var, int Ndepend, double** dependencies) override;
-		void setup_scheme(int *soln_size, int Nparams, double* params[]) override;
 };
+
+#endif

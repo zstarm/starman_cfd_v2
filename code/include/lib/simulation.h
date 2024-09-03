@@ -1,10 +1,11 @@
-#pragma once
+#ifndef SIMULATION_H
+#define SIMULATION_H
+
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <stdexcept>
 #include <memory>
-
 #include "schemes.h"
 
 ///////////////////////////////////
@@ -103,7 +104,8 @@ class boundary_condition {
 ///////////////////////////////////
 // SIMULATION VARIABLES
 ///////////////////////////////////
-
+//
+class scheme;
 class sim_variable {
 	private:
 
@@ -145,3 +147,5 @@ class simulation {
 		simulation(std::string ifname = "input.dat", std::string ofname = "output.dat");
 		~simulation();
 };
+
+#endif

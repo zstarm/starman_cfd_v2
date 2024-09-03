@@ -1,12 +1,12 @@
-#pragma once
+#ifndef FLUIDS_SIM_H
+#define FLUIDS_SIM_H
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
-#include <memory>
 
-#include <fluids_solvers.h>
-#include <lib/simulation.h>
+#include "fluids_solvers.h"
+#include "lib/simulation.h"
 
 ///////////////////////////////////
 // INPUT
@@ -43,6 +43,11 @@ class sim_in_CFD_2D_cart : public simulation_input {
 
 		void read_input() override;
 		void print_input_parameters() override;
+
+		std::vector<double>* get_pressure_solver_opts();
+		double* get_reynolds_num();
+		double* get_peclet_num();
+		double* get_heat_gen();
 };
 
 ///////////////////////////////////
@@ -104,3 +109,4 @@ class fluid_sim_2D : public simulation {
 
 };
 
+#endif
